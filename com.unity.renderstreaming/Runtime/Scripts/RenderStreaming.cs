@@ -49,7 +49,7 @@ namespace Unity.RenderStreaming
             }
             return null;
         }
-		
+
 		static ISignaling CreateSignaling(string type, string url, float interval, SynchronizationContext context) {
             Type _type = GetType(type);
             if (_type == null) {
@@ -111,9 +111,6 @@ namespace Unity.RenderStreaming
         {
             RTCConfiguration _conf =
                 conf.GetValueOrDefault(new RTCConfiguration { iceServers = iceServers });
-            if (hardwareEncoder != null)
-                hardwareEncoderSupport = hardwareEncoder.Value;
-            var encoderType = hardwareEncoderSupport ? EncoderType.Hardware : EncoderType.Software;
 
             if (signaling != null)
             {
@@ -128,7 +125,6 @@ namespace Unity.RenderStreaming
             RenderStreamingDependencies dependencies = new RenderStreamingDependencies
             {
                 config = _conf,
-                encoderType = encoderType,
                 signaling = _signaling,
                 startCoroutine = StartCoroutine,
                 resentOfferInterval = interval,

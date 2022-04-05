@@ -7,6 +7,7 @@
     "com.unity.ide.vscode": "1.2.4",
     "com.unity.test-framework": "1.1.30",
     "com.unity.ugui": "1.0.0",
+    "com.unity.webrtc": "file:../../../com.unity.webrtc",
     "com.unity.xr.arcore": "4.1.9",
     "com.unity.xr.arfoundation": "4.1.9",
     "com.unity.xr.arkit": "4.1.9",

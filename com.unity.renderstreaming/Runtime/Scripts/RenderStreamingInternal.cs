@@ -22,11 +22,6 @@ namespace Unity.RenderStreaming
         /// <summary>
         ///
         /// </summary>
-        public EncoderType encoderType;
-
-        /// <summary>
-        ///
-        /// </summary>
         public RTCConfiguration config;
 
         /// <summary>
@@ -102,6 +97,8 @@ namespace Unity.RenderStreaming
 
         static List<RenderStreamingInternal> s_list = new List<RenderStreamingInternal>();
 
+        private RTCRtpCodecCapability[] _avaiableVideCodecs;
+
         /// <summary>
         ///
         /// </summary>
@@ -115,7 +112,7 @@ namespace Unity.RenderStreaming
 
             if (s_list.Count == 0)
             {
-                WebRTC.WebRTC.Initialize(dependencies.encoderType);
+                WebRTC.WebRTC.Initialize();
             }
 
             _config = dependencies.config;
@@ -132,6 +129,8 @@ namespace Unity.RenderStreaming
 
             s_list.Add(this);
             _startCoroutine(WebRTC.WebRTC.Update());
+
+            _avaiableVideCodecs = RTCRtpSender.GetCapabilities(TrackKind.Video).codecs;
         }
 
         /// <summary>
@@ -227,10 +226,12 @@ namespace Unity.RenderStreaming
             RTCRtpSender sender = peer.peer.AddTrack(track);
             var transceiver = peer.peer.GetTransceivers().First(t => t.Sender == sender);
 
-            // note:: This line is needed to stream video to other peers with hardware codec.
-            // The exchanging SDP is failed if remove the line because the hardware decoder currently is not supported.
-            // Please remove the line after supporting the hardware decoder.
-            transceiver.Direction = RTCRtpTransceiverDirection.SendOnly;
+            var h264codec = _avaiableVideCodecs.FirstOrDefault(c => c.mimeType.Contains("H264"));
+            if (h264codec != null)
+            {
+                transceiver.SetCodecPreferences(new[] {h264codec});
+            }
+
             return transceiver;
         }
 
