@@ -115,5 +115,10 @@ namespace Unity.RenderStreaming
                 Graphics.Blit(m_screenTexture, m_sendTexture);
             }
         }
+
+        public void ChangeBitrate()
+        {
+            ChangeVideoParameters(connections.First(), 10000000, null);
+        }
     }
 }

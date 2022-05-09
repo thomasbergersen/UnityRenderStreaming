@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ namespace Unity.RenderStreaming.Samples
     [RequireComponent(typeof(RectTransform))]
     class UIController : MonoBehaviour
     {
+        [SerializeField] private Text timeText;
         [SerializeField] Text text;
         [SerializeField] CanvasGroup canvasGroup;
         [SerializeField] Image pointer;
@@ -52,6 +54,14 @@ namespace Unity.RenderStreaming.Samples
             m_rectTransform = GetComponent<RectTransform>();
             canvasGroup.alpha = 0;
             text.text = string.Empty;
+        }
+
+        private void Update()
+        {
+            if (timeText != null)
+            {
+                timeText.text = DateTime.Now.ToString("O");
+            }
         }
 
         void FixedUpdate()

@@ -226,10 +226,14 @@ namespace Unity.RenderStreaming
             RTCRtpSender sender = peer.peer.AddTrack(track);
             var transceiver = peer.peer.GetTransceivers().First(t => t.Sender == sender);
 
-            var h264codec = _avaiableVideCodecs.FirstOrDefault(c => c.mimeType.Contains("H264"));
-            if (h264codec != null)
+            if (track is VideoStreamTrack)
             {
-                transceiver.SetCodecPreferences(new[] {h264codec});
+                // var h264codec = _avaiableVideCodecs.FirstOrDefault(c => c.mimeType.Contains("VP8"));
+                var h264codec = _avaiableVideCodecs.FirstOrDefault(c => c.mimeType.Contains("H264"));
+                if (h264codec != null)
+                {
+                    transceiver.SetCodecPreferences(new[] {h264codec});
+                }
             }
 
             return transceiver;
